@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:12.0-alpine
+    container_name: fastapiapp_demodb
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+    networks:
+      - fastapiappnetwork
+
+  app:
+    container_name: fastapiapp_demoapp
+    build:
+      dockerfile: Dockerfile
+      context: .
+    stdin_open: true
+    tty: true
+    restart: always
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    networks:
+      - fastapiappnetwork
+    
+    environment:
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_HOST=$POSTGRES_HOST
+      - POSTGRES_PORT=$POSTGRES_PORT
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+
+networks:
+  fastapiappnetwork:
+
+volumes:
+  postgres_data:

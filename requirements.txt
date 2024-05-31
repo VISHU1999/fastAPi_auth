@@ -1,0 +1,10 @@
+fastapi
+bcrypt
+pyjwt
+alembic
+uvicorn
+SQLAlchemy
+psycopg2-binary
+email-validator
+python-dotenv
+python-jose
